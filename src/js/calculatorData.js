@@ -1,0 +1,20 @@
+export const calculatorData = [
+  {'AC': ['button', 'span-2']},
+  {'DEL': ['button', 'span-1']},
+  {'÷': ['button', 'span-1']},
+  {'1': ['button', 'span-1']},
+  {'2': ['button', 'span-1']},
+  {'3': ['button', 'span-1']},
+  {'×': ['button', 'span-1']},
+  {'4': ['button', 'span-1']},
+  {'5': ['button', 'span-1']},
+  {'6': ['button', 'span-1']},
+  {'+': ['button', 'span-1']},
+  {'7': ['button', 'span-1']},
+  {'8': ['button', 'span-1']},
+  {'9': ['button', 'span-1']},
+  {'-': ['button', 'span-1']},
+  {'.': ['button', 'span-1']},
+  {'0': ['button', 'span-1']},
+  {'=': ['button', 'span-2']}
+]
