@@ -1,3 +1,15 @@
-body {
-  background-color: red;
+@mixin flex ($justify: flex-start, $align: flex-start, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin size ($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+@mixin transition ($transition: 300ms) {
+  transition: $transition;
 }

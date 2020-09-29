@@ -1,0 +1,16 @@
+* {
+  @extend %margin-and-padding-zero;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+
+  &::before, &::after, button  {
+    @extend %margin-and-padding-zero;
+    box-sizing: border-box;
+  }
+}
+
+button {
+  width: 100%;
+  border: none;
+  outline: none;
+}

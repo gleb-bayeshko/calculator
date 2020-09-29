@@ -1,0 +1,18 @@
+.button {
+  background-color: $button-background-color;
+  color: $button-color;
+  cursor: pointer;
+  user-select: none;
+  @include transition (300ms);
+
+  &:hover {
+    background-color: $button-background-hover-color;
+    color: $button-hover-color;
+  }
+
+  &:active {
+    @include transition (100ms);
+    background-color: $button-background-active-color;
+    transform: scale(0.9);
+  }
+}
