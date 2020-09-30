@@ -54,31 +54,68 @@ body {
 }
 
 .calculator-grid {
+  position: relative;
   background-color: #050116;
+  padding: 5px;
 }
 
 .button {
+  position: relative;
   background-color: #110842;
   color: #1ef14c;
   cursor: pointer;
   user-select: none;
   transition: 300ms;
+  z-index: 20;
+  box-shadow: 0 0 80px 10px transparent;
 }
 .button:hover {
-  background-color: #352e5a;
-  color: #7aeb92;
+  background-color: #483a91;
+  color: #75ee8f;
 }
 .button:active {
-  transition: 100ms;
-  background-color: #211657;
-  transform: scale(0.9);
+  transition: 50ms;
+  background-color: #1e115e;
+  transform: scale(0.8);
 }
 
+.button_active {
+  display: block;
+  position: absolute;
+  background-color: #00ff4c;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  box-shadow: 0 0 10px 10px #00ff4c;
+  z-index: 19;
+  animation-name: shining;
+  animation-duration: 500ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+@keyframes shining {
+  10% {
+    box-shadow: 0 0 10px 30px #00ff4c;
+  }
+  25% {
+    box-shadow: 0 0 10px 50px #00ff4c;
+  }
+  50% {
+    box-shadow: 0 0 10px 70px #00ff4c;
+  }
+  100% {
+    box-shadow: 0 0 10px 110px transparent;
+  }
+}
 .output {
   color: white;
   background-color: #050116;
   padding: 5px;
   row-gap: 0;
+  border: 1px solid #1ef14c;
+  z-index: 30;
 }
 
 .previous-operand {

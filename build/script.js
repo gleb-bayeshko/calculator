@@ -96,10 +96,10 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_calculatorData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/calculatorData */ "./src/js/calculatorData.js");
-/* harmony import */ var _js_components_Calculator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/components/Calculator */ "./src/js/components/Calculator.js");
+/* harmony import */ var _js_components_CalculatorCreator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/components/CalculatorCreator */ "./src/js/components/CalculatorCreator.js");
 
 
-var calculator = new _js_components_Calculator__WEBPACK_IMPORTED_MODULE_1__["Calculator"]({
+var calculator = new _js_components_CalculatorCreator__WEBPACK_IMPORTED_MODULE_1__["CalculatorCreator"]({
   parentClass: null,
   calculatorClasses: ['calculator-grid']
 });
@@ -109,6 +109,7 @@ calculator.renderOutput({
   currentOperandClasses: ['current-operand']
 });
 calculator.renderButtons(_js_calculatorData__WEBPACK_IMPORTED_MODULE_0__["calculatorData"]);
+calculator.addButtonsEffectOnClick('button_active');
 
 /***/ }),
 
@@ -123,55 +124,109 @@ calculator.renderButtons(_js_calculatorData__WEBPACK_IMPORTED_MODULE_0__["calcul
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calculatorData", function() { return calculatorData; });
 var calculatorData = [{
-  'AC': ['button', 'span-2']
+  'AC': {
+    classes: ['button', 'span-2'],
+    dataType: ['all-clear']
+  }
 }, {
-  'DEL': ['button', 'span-1']
+  'DEL': {
+    classes: ['button', 'span-1'],
+    dataType: ['delete']
+  }
 }, {
-  '÷': ['button', 'span-1']
+  '÷': {
+    classes: ['button', 'span-1'],
+    dataType: ['operation']
+  }
 }, {
-  '1': ['button', 'span-1']
+  '1': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '2': ['button', 'span-1']
+  '2': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '3': ['button', 'span-1']
+  '3': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '×': ['button', 'span-1']
+  '×': {
+    classes: ['button', 'span-1'],
+    dataType: ['operation']
+  }
 }, {
-  '4': ['button', 'span-1']
+  '4': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '5': ['button', 'span-1']
+  '5': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '6': ['button', 'span-1']
+  '6': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '+': ['button', 'span-1']
+  '+': {
+    classes: ['button', 'span-1'],
+    dataType: ['operation']
+  }
 }, {
-  '7': ['button', 'span-1']
+  '7': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '8': ['button', 'span-1']
+  '8': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '9': ['button', 'span-1']
+  '9': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '-': ['button', 'span-1']
+  '-': {
+    classes: ['button', 'span-1'],
+    dataType: ['operation']
+  }
 }, {
-  '.': ['button', 'span-1']
+  '.': {
+    classes: ['button', 'span-1'],
+    dataType: ['operation']
+  }
 }, {
-  '0': ['button', 'span-1']
+  '0': {
+    classes: ['button', 'span-1'],
+    dataType: ['number']
+  }
 }, {
-  '=': ['button', 'span-2']
+  '=': {
+    classes: ['button', 'span-2'],
+    dataType: ['equal']
+  }
 }];
 
 /***/ }),
 
-/***/ "./src/js/components/Calculator.js":
-/*!*****************************************!*\
-  !*** ./src/js/components/Calculator.js ***!
-  \*****************************************/
-/*! exports provided: Calculator */
+/***/ "./src/js/components/CalculatorCreator.js":
+/*!************************************************!*\
+  !*** ./src/js/components/CalculatorCreator.js ***!
+  \************************************************/
+/*! exports provided: CalculatorCreator */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Calculator", function() { return Calculator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CalculatorCreator", function() { return CalculatorCreator; });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -190,15 +245,19 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Calculator = /*#__PURE__*/function () {
-  function Calculator(_ref) {
+var CalculatorCreator = /*#__PURE__*/function () {
+  function CalculatorCreator(_ref) {
     var _ref$parentClass = _ref.parentClass,
         parentClass = _ref$parentClass === void 0 ? null : _ref$parentClass,
         calculatorClasses = _ref.calculatorClasses;
 
-    _classCallCheck(this, Calculator);
+    _classCallCheck(this, CalculatorCreator);
 
     this.calculator = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(calculatorClasses)));
+    this.buttons = [];
+    this.output = '';
+    this.currentOperand = '';
+    this.previousOperand = '';
 
     if (parentClass === null) {
       this._addElementsToParent(document.querySelector('body'), false, this.calculator);
@@ -207,22 +266,19 @@ var Calculator = /*#__PURE__*/function () {
     }
   }
 
-  _createClass(Calculator, [{
+  _createClass(CalculatorCreator, [{
     key: "renderOutput",
     value: function renderOutput(_ref2) {
       var currentOperandClasses = _ref2.currentOperandClasses,
           previousOperandClasses = _ref2.previousOperandClasses,
           outputClasses = _ref2.outputClasses;
+      this.output = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(outputClasses)));
+      this.currentOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(currentOperandClasses)));
+      this.previousOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(previousOperandClasses)));
 
-      var output = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(outputClasses)));
+      this._addElementsToParent(this.calculator, false, this.output);
 
-      var currentOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(currentOperandClasses)));
-
-      var previousOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(previousOperandClasses)));
-
-      this._addElementsToParent(this.calculator, false, output);
-
-      this._addElementsToParent(output, true, previousOperand, currentOperand);
+      this._addElementsToParent(this.output, true, this.previousOperand, this.currentOperand);
     }
   }, {
     key: "renderButtons",
@@ -231,13 +287,45 @@ var Calculator = /*#__PURE__*/function () {
 
       buttonsData.forEach(function (buttonData) {
         for (var buttonKey in buttonData) {
-          var button = _this._createElementWithClasses.apply(_this, ['button'].concat(_toConsumableArray(buttonData[buttonKey])));
+          var button = _this._createElementWithClasses.apply(_this, ['button'].concat(_toConsumableArray(buttonData[buttonKey]['classes'])));
+
+          _this._setDataAttributeToElement.apply(_this, [button].concat(_toConsumableArray(buttonData[buttonKey]['dataType'])));
 
           _this._addInnerHtmlToElement(button, buttonKey);
 
           _this._addElementsToParent(_this.calculator, true, button);
+
+          _this.buttons.push(button);
         }
       });
+    }
+  }, {
+    key: "addButtonsEffectOnClick",
+    value: function addButtonsEffectOnClick(activeClass) {
+      var _this2 = this;
+
+      this.buttons.forEach(function (button) {
+        return button.addEventListener('click', function (e) {
+          _this2._createEffectOnButtonClick(e, activeClass);
+        });
+      });
+    }
+  }, {
+    key: "_createEffectOnButtonClick",
+    value: function _createEffectOnButtonClick(e, activeClass) {
+      var currentButton = e.target;
+      var currentButtonCoordinates = currentButton.getBoundingClientRect();
+
+      var effect = this._createElementWithClasses('div', activeClass);
+
+      effect.style.top = "".concat(currentButton.offsetTop + currentButtonCoordinates.height / 2, "px");
+      effect.style.left = "".concat(currentButton.offsetLeft + currentButtonCoordinates.width / 2, "px");
+
+      this._addElementsToParent(this.calculator, true, effect);
+
+      setTimeout(function () {
+        effect.remove();
+      }, 1000);
     }
   }, {
     key: "_createElementWithClasses",
@@ -274,16 +362,25 @@ var Calculator = /*#__PURE__*/function () {
     }
   }, {
     key: "_addInnerHtmlToElement",
-    value: function _addInnerHtmlToElement(el) {
+    value: function _addInnerHtmlToElement(element) {
       for (var _len3 = arguments.length, innerHtml = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
         innerHtml[_key3 - 1] = arguments[_key3];
       }
 
-      el.innerHTML += [].concat(innerHtml);
+      element.innerHTML += [].concat(innerHtml);
+    }
+  }, {
+    key: "_setDataAttributeToElement",
+    value: function _setDataAttributeToElement(element) {
+      for (var _len4 = arguments.length, attributes = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        attributes[_key4 - 1] = arguments[_key4];
+      }
+
+      element.setAttribute('data-type', "".concat(attributes.join(' ')));
     }
   }]);
 
-  return Calculator;
+  return CalculatorCreator;
 }();
 
 /***/ }),

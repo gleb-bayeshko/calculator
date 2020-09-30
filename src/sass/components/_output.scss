@@ -3,6 +3,8 @@
   background-color: $output-background-color;
   padding: 5px;
   row-gap: 0;
+  border: 1px solid $output-border-color;
+  z-index: 30;
 }
 
 .previous-operand {

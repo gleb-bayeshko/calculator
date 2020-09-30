@@ -1,7 +1,7 @@
 import {calculatorData} from './js/calculatorData';
-import {Calculator} from './js/components/Calculator';
+import {CalculatorCreator} from './js/components/CalculatorCreator';
 
-let calculator = new Calculator({
+let calculator = new CalculatorCreator({
   parentClass: null,
   calculatorClasses: ['calculator-grid']
 });
@@ -13,3 +13,4 @@ calculator.renderOutput({
 })
 
 calculator.renderButtons(calculatorData);
+calculator.addButtonsEffectOnClick('button_active');
