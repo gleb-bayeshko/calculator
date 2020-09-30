@@ -145,20 +145,4 @@ body {
   align-content: center;
 }
 
-.ico-settings {
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: pointer;
-}
-
-svg path {
-  transition: 500ms;
-  fill: white !important;
-}
-svg:hover path {
-  fill: #17075f !important;
-}
-
 /*# sourceMappingURL=style.css.map*/
