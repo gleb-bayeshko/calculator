@@ -96,17 +96,18 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_calculatorData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/calculatorData */ "./src/js/calculatorData.js");
-/* harmony import */ var _js_components_CalculatorCreator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/components/CalculatorCreator */ "./src/js/components/CalculatorCreator.js");
+/* harmony import */ var _js_components_Calculator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/components/Calculator */ "./src/js/components/Calculator.js");
 
 
-var calculator = new _js_components_CalculatorCreator__WEBPACK_IMPORTED_MODULE_1__["CalculatorCreator"]({
+var calculator = new _js_components_Calculator__WEBPACK_IMPORTED_MODULE_1__["Calculator"]({
   parentClass: null,
   calculatorClasses: ['calculator-grid']
 });
 calculator.renderOutput({
   outputClasses: ['output', 'span-4'],
   previousOperandClasses: ['previous-operand'],
-  currentOperandClasses: ['current-operand']
+  currentOperandClasses: ['current-operand'],
+  operatorClasses: ['operator']
 });
 calculator.renderButtons(_js_calculatorData__WEBPACK_IMPORTED_MODULE_0__["calculatorData"]);
 calculator.addButtonsEffectOnClick('button_active');
@@ -201,7 +202,7 @@ var calculatorData = [{
 }, {
   '.': {
     classes: ['button', 'span-1'],
-    dataType: ['operation']
+    dataType: ['number']
   }
 }, {
   '0': {
@@ -211,22 +212,22 @@ var calculatorData = [{
 }, {
   '=': {
     classes: ['button', 'span-2'],
-    dataType: ['equal']
+    dataType: ['operation']
   }
 }];
 
 /***/ }),
 
-/***/ "./src/js/components/CalculatorCreator.js":
-/*!************************************************!*\
-  !*** ./src/js/components/CalculatorCreator.js ***!
-  \************************************************/
-/*! exports provided: CalculatorCreator */
+/***/ "./src/js/components/Calculator.js":
+/*!*****************************************!*\
+  !*** ./src/js/components/Calculator.js ***!
+  \*****************************************/
+/*! exports provided: Calculator */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CalculatorCreator", function() { return CalculatorCreator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Calculator", function() { return Calculator; });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -245,40 +246,47 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var CalculatorCreator = /*#__PURE__*/function () {
-  function CalculatorCreator(_ref) {
+var Calculator = /*#__PURE__*/function () {
+  function Calculator(_ref) {
     var _ref$parentClass = _ref.parentClass,
         parentClass = _ref$parentClass === void 0 ? null : _ref$parentClass,
         calculatorClasses = _ref.calculatorClasses;
 
-    _classCallCheck(this, CalculatorCreator);
+    _classCallCheck(this, Calculator);
 
     this.calculator = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(calculatorClasses)));
-    this.buttons = [];
+    this.allButtons = [];
+    this.equalButton = '';
     this.output = '';
     this.currentOperand = '';
     this.previousOperand = '';
+    this.rounding = 10;
+    this.currentOperation = null;
+    this.isOperationAfterEqual = false;
 
     if (parentClass === null) {
       this._addElementsToParent(document.querySelector('body'), false, this.calculator);
     } else {
       this._addElementsToParent(document.querySelector(".".concat(parentClass)), false, this.calculator);
     }
-  }
+  } // Create elements on page
 
-  _createClass(CalculatorCreator, [{
+
+  _createClass(Calculator, [{
     key: "renderOutput",
     value: function renderOutput(_ref2) {
       var currentOperandClasses = _ref2.currentOperandClasses,
           previousOperandClasses = _ref2.previousOperandClasses,
-          outputClasses = _ref2.outputClasses;
+          outputClasses = _ref2.outputClasses,
+          operatorClasses = _ref2.operatorClasses;
       this.output = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(outputClasses)));
       this.currentOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(currentOperandClasses)));
       this.previousOperand = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(previousOperandClasses)));
+      this.operationField = this._createElementWithClasses.apply(this, ['div'].concat(_toConsumableArray(operatorClasses)));
 
       this._addElementsToParent(this.calculator, false, this.output);
 
-      this._addElementsToParent(this.output, true, this.previousOperand, this.currentOperand);
+      this._addElementsToParent(this.output, true, this.previousOperand, this.operationField, this.currentOperand);
     }
   }, {
     key: "renderButtons",
@@ -295,16 +303,42 @@ var CalculatorCreator = /*#__PURE__*/function () {
 
           _this._addElementsToParent(_this.calculator, true, button);
 
-          _this.buttons.push(button);
+          _this.allButtons.push(button);
+
+          switch (button.getAttribute('data-type')) {
+            case 'operation':
+              button.addEventListener('click', function (e) {
+                return _this._selectOperation(e.target.textContent);
+              });
+              break;
+
+            case 'delete':
+              button.addEventListener('click', function () {
+                return _this._delete();
+              });
+              break;
+
+            case 'all-clear':
+              button.addEventListener('click', function () {
+                return _this._allClear();
+              });
+              break;
+
+            default:
+              button.addEventListener('click', function (e) {
+                return _this._appendNumber(e);
+              });
+          }
         }
       });
-    }
+    } // Visual effects on button click
+
   }, {
     key: "addButtonsEffectOnClick",
     value: function addButtonsEffectOnClick(activeClass) {
       var _this2 = this;
 
-      this.buttons.forEach(function (button) {
+      this.allButtons.forEach(function (button) {
         return button.addEventListener('click', function (e) {
           _this2._createEffectOnButtonClick(e, activeClass);
         });
@@ -314,19 +348,134 @@ var CalculatorCreator = /*#__PURE__*/function () {
     key: "_createEffectOnButtonClick",
     value: function _createEffectOnButtonClick(e, activeClass) {
       var currentButton = e.target;
-      var currentButtonCoordinates = currentButton.getBoundingClientRect();
 
       var effect = this._createElementWithClasses('div', activeClass);
 
-      effect.style.top = "".concat(currentButton.offsetTop + currentButtonCoordinates.height / 2, "px");
-      effect.style.left = "".concat(currentButton.offsetLeft + currentButtonCoordinates.width / 2, "px");
-
       this._addElementsToParent(this.calculator, true, effect);
 
+      effect.style.top = "".concat(currentButton.offsetTop + currentButton.clientHeight / 2 - effect.clientHeight / 2, "px");
+      effect.style.left = "".concat(currentButton.offsetLeft + currentButton.clientWidth / 2 - effect.clientWidth / 2, "px");
       setTimeout(function () {
         effect.remove();
-      }, 1000);
+      }, 500);
+    } // Display methods
+
+  }, {
+    key: "_allClear",
+    value: function _allClear() {
+      this._clearCurrentOperand();
+
+      this._clearPreviousOperand();
+
+      this._clearOperationField();
+
+      this.currentOperation = null;
     }
+  }, {
+    key: "_clearCurrentOperand",
+    value: function _clearCurrentOperand() {
+      this._setInnerHtmlOfElement(this.currentOperand, '');
+    }
+  }, {
+    key: "_clearPreviousOperand",
+    value: function _clearPreviousOperand() {
+      this._setInnerHtmlOfElement(this.previousOperand, '');
+    }
+  }, {
+    key: "_clearOperationField",
+    value: function _clearOperationField() {
+      this._setInnerHtmlOfElement(this.operationField, '');
+    }
+  }, {
+    key: "_delete",
+    value: function _delete() {
+      if (this.currentOperand.textContent === 'NaN') {
+        console.log('');
+
+        this._setInnerHtmlOfElement(this.currentOperand, '');
+      } else {
+        this._setInnerHtmlOfElement(this.currentOperand, this.currentOperand.textContent.substring(0, this.currentOperand.textContent.length - 1));
+      }
+    }
+  }, {
+    key: "_appendNumber",
+    value: function _appendNumber(number) {
+      if (this.isOperationAfterEqual) {
+        this._allClear();
+
+        this.isOperationAfterEqual = false;
+      }
+
+      this._addInnerHtmlToElement(this.currentOperand, number.target.textContent);
+    } // Calculation methods
+
+  }, {
+    key: "_selectOperation",
+    value: function _selectOperation(operator) {
+      if (this.currentOperand.textContent === '' && !this.currentOperation) return;
+
+      if (this.currentOperand.textContent === '' && this.currentOperation) {
+        this._setInnerHtmlOfElement(this.operationField, operator);
+
+        this.currentOperation = operator;
+        return;
+      }
+
+      if (operator === '=') {
+        this.isOperationAfterEqual = true;
+        if (this.previousOperand.textContent === '') return;
+
+        this._setInnerHtmlOfElement(this.currentOperand, this._calculate());
+
+        this._clearPreviousOperand();
+
+        this._clearOperationField();
+
+        this.currentOperation = null;
+        return;
+      }
+
+      if (!this.currentOperation) {
+        this._setInnerHtmlOfElement(this.previousOperand, this.currentOperand.textContent);
+      } else {
+        this._setInnerHtmlOfElement(this.previousOperand, this._calculate());
+      }
+
+      this.isOperationAfterEqual = false;
+      this.currentOperation = operator;
+
+      this._setInnerHtmlOfElement(this.operationField, operator);
+
+      this._clearCurrentOperand();
+    }
+  }, {
+    key: "_calculate",
+    value: function _calculate() {
+      var result = 0;
+
+      switch (this.currentOperation) {
+        case '+':
+          result = +this.previousOperand.textContent + +this.currentOperand.textContent;
+          break;
+
+        case '-':
+          result = +this.previousOperand.textContent - +this.currentOperand.textContent;
+          break;
+
+        case '/':
+        case '÷':
+          result = +this.previousOperand.textContent / +this.currentOperand.textContent;
+          break;
+
+        case '*':
+        case '×':
+          result = +this.previousOperand.textContent * +this.currentOperand.textContent;
+          break;
+      }
+
+      return +result.toFixed(this.rounding);
+    } // Helper methods
+
   }, {
     key: "_createElementWithClasses",
     value: function _createElementWithClasses(elementType) {
@@ -367,20 +516,29 @@ var CalculatorCreator = /*#__PURE__*/function () {
         innerHtml[_key3 - 1] = arguments[_key3];
       }
 
-      element.innerHTML += [].concat(innerHtml);
+      element.innerHTML += innerHtml.join('');
+    }
+  }, {
+    key: "_setInnerHtmlOfElement",
+    value: function _setInnerHtmlOfElement(element) {
+      for (var _len4 = arguments.length, innerHtml = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+        innerHtml[_key4 - 1] = arguments[_key4];
+      }
+
+      element.innerHTML = innerHtml.join('');
     }
   }, {
     key: "_setDataAttributeToElement",
     value: function _setDataAttributeToElement(element) {
-      for (var _len4 = arguments.length, attributes = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        attributes[_key4 - 1] = arguments[_key4];
+      for (var _len5 = arguments.length, attributes = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+        attributes[_key5 - 1] = arguments[_key5];
       }
 
       element.setAttribute('data-type', "".concat(attributes.join(' ')));
     }
   }]);
 
-  return CalculatorCreator;
+  return Calculator;
 }();
 
 /***/ }),

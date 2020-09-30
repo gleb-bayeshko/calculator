@@ -1,0 +1,19 @@
+.ico-settings {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+svg {
+  path {
+    transition: 500ms;
+    fill:white!important;
+  }
+
+  &:hover path {
+    fill:rgb(23, 7, 95)!important;
+  }
+}
+

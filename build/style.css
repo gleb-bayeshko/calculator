@@ -24,8 +24,8 @@ body {
   flex-direction: row;
   width: 100vw;
   height: 100vh;
-  font-size: 10px;
   background: linear-gradient(90deg, #020024 10%, #1eab6e 49%, #020024 90%) no-repeat;
+  font-size: 10px;
 }
 
 .calculator-grid {
@@ -47,10 +47,8 @@ body {
 }
 
 .output {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-direction: column;
+  display: grid;
+  grid-template: 1fr 2fr/1fr 10px;
 }
 
 .calculator-grid {
@@ -67,16 +65,18 @@ body {
   user-select: none;
   transition: 300ms;
   z-index: 20;
-  box-shadow: 0 0 80px 10px transparent;
+  box-shadow: 1px 1px 0 1px #0f0738;
 }
 .button:hover {
   background-color: #483a91;
   color: #75ee8f;
 }
 .button:active {
-  transition: 50ms;
-  background-color: #1e115e;
-  transform: scale(0.8);
+  transition: 100ms;
+  background-color: #3d307a;
+  transform: scale(1);
+  box-shadow: inset 1px 1px 0 1px #0f0738;
+  font-size: 0.7rem;
 }
 
 .button_active {
@@ -85,8 +85,8 @@ body {
   background-color: #00ff4c;
   top: 0;
   left: 0;
-  width: 1px;
-  height: 1px;
+  width: 10px;
+  height: 10px;
   box-shadow: 0 0 10px 10px #00ff4c;
   z-index: 19;
   animation-name: shining;
@@ -116,15 +116,49 @@ body {
   row-gap: 0;
   border: 1px solid #1ef14c;
   z-index: 30;
+  overflow: hidden;
 }
 
 .previous-operand {
+  display: grid;
+  justify-content: end;
+  align-content: center;
   font-size: 1rem;
+  width: 100%;
+  overflow: hidden;
 }
 
 .current-operand {
+  display: grid;
+  justify-content: end;
+  align-content: end;
   font-size: 1.5rem;
-  line-height: 1rem;
+  line-height: 1.4rem;
+  width: 100%;
+  overflow: hidden;
+  grid-column: span 2;
+}
+
+.operator {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.ico-settings {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+svg path {
+  transition: 500ms;
+  fill: white !important;
+}
+svg:hover path {
+  fill: #17075f !important;
 }
 
 /*# sourceMappingURL=style.css.map*/

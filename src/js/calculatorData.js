@@ -77,7 +77,7 @@ export const calculatorData = [
   },
   {'.': {
       classes: ['button', 'span-1'],
-      dataType: ['operation'],
+      dataType: ['number'],
     }
   },
   {'0': {
@@ -87,7 +87,7 @@ export const calculatorData = [
   },
   {'=': {
     classes: ['button', 'span-2'],
-    dataType: ['equal'],
+    dataType: ['operation'],
     }
   }
 ]

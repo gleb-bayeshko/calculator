@@ -6,7 +6,8 @@
   user-select: none;
   @include transition (300ms);
   z-index: 20;
-  box-shadow: 0 0 80px 10px transparent;
+  box-shadow: 1px 1px 0 1px  rgb(15, 7, 56);
+
 
   &:hover {
     background-color: $button-background-hover-color;
@@ -14,9 +15,11 @@
   }
 
   &:active {
-    @include transition (50ms);
+    @include transition (100ms);
     background-color: $button-background-active-color;
-    transform: scale(0.8);
+    transform: scale(1);
+    box-shadow: inset 1px 1px 0 1px  rgb(15, 7, 56);
+    font-size: 0.7rem;
   }
 }
 
@@ -26,8 +29,8 @@
   background-color: $button-shadow-active-color;
   top: 0;
   left: 0;
-  width: 1px;
-  height: 1px;
+  width: 10px;
+  height: 10px;
   box-shadow: 0 0 10px 10px $button-shadow-active-color;
 
   z-index: 19;
