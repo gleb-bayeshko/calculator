@@ -7,6 +7,7 @@
   @include transition (300ms);
   z-index: 20;
   box-shadow: 1px 1px 0 1px  rgb(15, 7, 56);
+  font-size: 1.3rem;
 
 
   &:hover {
@@ -19,7 +20,7 @@
     background-color: $button-background-active-color;
     transform: scale(1);
     box-shadow: inset 1px 1px 0 1px  rgb(15, 7, 56);
-    font-size: 0.7rem;
+    font-size: 1.28rem;
   }
 }
 
