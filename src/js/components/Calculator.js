@@ -98,15 +98,20 @@ export class Calculator {
   }
 
   _delete() {
-    if (this.currentOperand.textContent === 'NaN') {
-      console.log('');
+    if (this.currentOperand.textContent === 'NaN' || this.currentOperand.textContent === 'Infinity') {
       this._setInnerHtmlOfElement(this.currentOperand, '');
-    } else {
-      this._setInnerHtmlOfElement(
-        this.currentOperand,
-        this.currentOperand.textContent.substring(0, this.currentOperand.textContent.length - 1)
-      );
+    } else if (this.currentOperand.textContent === '') {
+      this.currentOperation = null;
+      this._setInnerHtmlOfElement(this.currentOperand, this.previousOperand.textContent);
+      this._clearOperationField();
+      this._clearPreviousOperand();
+      return
     }
+
+    this._setInnerHtmlOfElement(
+      this.currentOperand,
+      this.currentOperand.textContent.substring(0, this.currentOperand.textContent.length - 1)
+    );
   }
 
   _appendNumber(number) {
@@ -119,19 +124,36 @@ export class Calculator {
 
   // Calculation methods
   _selectOperation(operator) {
-    if (this.currentOperand.textContent === '' && !this.currentOperation) return;
-
-    if (this.currentOperand.textContent === '' && this.currentOperation) {
-      this._setInnerHtmlOfElement(this.operationField, operator);
-      this.currentOperation = operator;
+    if (this.currentOperand.textContent === '' && operator !== '-' && operator !== '=') {
+      if (this.currentOperation) {
+        this._setInnerHtmlOfElement(this.operationField, operator);
+        this.currentOperation = operator;
+      }
       return
+    }
+
+    if (operator !== '-' && this.currentOperand.textContent === '-') {
+      return
+    }
+
+    if (operator === '-') {
+      if (this.isOperationAfterEqual || this.currentOperand.textContent === '' || this.currentOperand.textContent === '-') {
+        this._setInnerHtmlOfElement(this.currentOperand, '-');
+        this.isOperationAfterEqual = false;
+        return
+      }
     }
 
     if (operator === '=') {
       this.isOperationAfterEqual = true;
-      if (this.previousOperand.textContent === '') return;
+      if (this.previousOperand.textContent === '') {
+        return;
+      } else if (this.previousOperand.textContent !== '' && this.currentOperand.textContent === '') {
+        this._setInnerHtmlOfElement(this.currentOperand, this.previousOperand.textContent);
+      } else if (this.previousOperand.textContent !== '' && this.currentOperand.textContent !== '') {
+        this._setInnerHtmlOfElement(this.currentOperand, this._calculate());
+      }
 
-      this._setInnerHtmlOfElement(this.currentOperand, this._calculate());
       this._clearPreviousOperand();
       this._clearOperationField();
       this.currentOperation = null;
