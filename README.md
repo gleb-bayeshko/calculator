@@ -1,1 +1,0 @@
-deploy: https://gleb-bayeshko.github.io/calculator/
