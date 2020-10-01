@@ -24,14 +24,14 @@
   * Final bundle.
 
 ## Functionality ##
-1. Basic calculations:
+- Basic calculations:
   - Addition
   - Subtraction
   - Multiplication
   - Division
-1. Actions with fractional numbers;
-1. Input of negative numbers;
-1. All-clear button;
-1. Delete button:
+- Actions with fractional numbers;
+- Input of negative numbers;
+- All-clear button;
+- Delete button:
   - Delete numbers one at time,
   - Delete operator if input is empty and move pervious result to the input area;
