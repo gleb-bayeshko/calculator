@@ -1,14 +1,15 @@
 export class Calculator {
-  constructor({parentClass = null, calculatorClasses}) {
+  constructor({ parentClass = null, calculatorClasses }) {
     this.calculator = this._createElementWithClasses('div', ...calculatorClasses);
     this.allButtons = [];
     this.equalButton = '';
     this.output = '';
     this.currentOperand = '';
     this.previousOperand = '';
-    this.rounding = 10;
-    this.currentOperation = null;
-    this.isOperationAfterEqual = false;
+    this.rounding = 7;
+    this.currentOperator = null;
+    this.needToClearCurrentOperand = false;
+    this.isError = false;
 
     if (parentClass === null) {
       this._addElementsToParent(document.querySelector('body'), false, this.calculator);
@@ -18,7 +19,7 @@ export class Calculator {
   }
 
   // Create elements on page
-  renderOutput({currentOperandClasses, previousOperandClasses, outputClasses, operatorClasses}) {
+  renderOutput({ currentOperandClasses, previousOperandClasses, outputClasses, operatorClasses }) {
 
     this.output = this._createElementWithClasses('div', ...outputClasses);
     this.currentOperand = this._createElementWithClasses('div', ...currentOperandClasses);
@@ -41,7 +42,7 @@ export class Calculator {
 
         switch (button.getAttribute('data-type')) {
           case 'operation':
-            button.addEventListener('click', (e) => this._selectOperation(e.target.textContent));
+            button.addEventListener('click', (e) => this._updateDisplayByOperator(e.target.textContent));
             break;
           case 'delete':
             button.addEventListener('click', () => this._delete());
@@ -50,7 +51,7 @@ export class Calculator {
             button.addEventListener('click', () => this._allClear());
             break;
           default:
-            button.addEventListener('click', (e) => this._appendNumber(e));
+            button.addEventListener('click', (e) => this._appendNumber(e.target.textContent));
         }
       }
     })
@@ -72,17 +73,21 @@ export class Calculator {
     effect.style.top = `${currentButton.offsetTop + currentButton.clientHeight / 2 - effect.clientHeight / 2}px`;
     effect.style.left = `${currentButton.offsetLeft + currentButton.clientWidth / 2 - effect.clientWidth / 2}px`;
 
-    setTimeout( ()=> {
+    setTimeout(() => {
       effect.remove()
     }, 500)
   }
 
-  // Display methods
-  _allClear() {
+  // Calculations and operations methods
+  _allClear(changeErrorStatus = true) {
     this._clearCurrentOperand();
     this._clearPreviousOperand();
     this._clearOperationField();
-    this.currentOperation = null;
+    this.currentOperator = null;
+
+    if (changeErrorStatus) {
+      this.isError = false;
+    }
   }
 
   _clearCurrentOperand() {
@@ -98,10 +103,11 @@ export class Calculator {
   }
 
   _delete() {
-    if (this.currentOperand.textContent === 'NaN' || this.currentOperand.textContent === 'Infinity') {
+    if (this.isError) {
       this._setInnerHtmlOfElement(this.currentOperand, '');
+      this.isError = false;
     } else if (this.currentOperand.textContent === '') {
-      this.currentOperation = null;
+      this.currentOperator = null;
       this._setInnerHtmlOfElement(this.currentOperand, this.previousOperand.textContent);
       this._clearOperationField();
       this._clearPreviousOperand();
@@ -115,38 +121,50 @@ export class Calculator {
   }
 
   _appendNumber(number) {
-    if (this.isOperationAfterEqual) {
-      this._allClear();
-      this.isOperationAfterEqual = false;
+    if (this.needToClearCurrentOperand) {
+      this._clearCurrentOperand();
+      this.needToClearCurrentOperand = false;
     }
-    this._addInnerHtmlToElement(this.currentOperand, number.target.textContent);
+    this._addInnerHtmlToElement(this.currentOperand, number);
   }
 
-  // Calculation methods
-  _selectOperation(operator) {
-    if (this.currentOperand.textContent === '' && operator !== '-' && operator !== '=') {
-      if (this.currentOperation) {
+  _updateDisplayByOperator(operator) {
+    if (this.isError) {
+      this._allClear();
+      this.isError = false;
+    }
+
+    if (this.currentOperand.textContent === '' && operator !== '-' && operator !== '√' && operator !== '=') {
+      if (this.currentOperator) {
         this._setInnerHtmlOfElement(this.operationField, operator);
-        this.currentOperation = operator;
+        this.currentOperator = operator;
       }
+
       return
     }
 
-    if (operator !== '-' && this.currentOperand.textContent === '-') {
+    if (this.currentOperand.textContent === '-') return;
+
+    if (operator === '√') {
+      this._setInnerHtmlOfElement(this.currentOperand, this._calculate(true));
+      this.needToClearCurrentOperand = true;
+
       return
     }
 
     if (operator === '-') {
-      if (this.isOperationAfterEqual || this.currentOperand.textContent === '' || this.currentOperand.textContent === '-') {
+      if (this.currentOperand.textContent === '') {
         this._setInnerHtmlOfElement(this.currentOperand, '-');
-        this.isOperationAfterEqual = false;
+        this.needToClearCurrentOperand = false;
+
         return
       }
     }
 
     if (operator === '=') {
-      this.isOperationAfterEqual = true;
+      this.needToClearCurrentOperand = true;
       if (this.previousOperand.textContent === '') {
+
         return;
       } else if (this.previousOperand.textContent !== '' && this.currentOperand.textContent === '') {
         this._setInnerHtmlOfElement(this.currentOperand, this.previousOperand.textContent);
@@ -156,42 +174,82 @@ export class Calculator {
 
       this._clearPreviousOperand();
       this._clearOperationField();
-      this.currentOperation = null;
+      this.currentOperator = null;
 
       return
     }
 
-    if(!this.currentOperation) {
+    if (!this.currentOperator) {
       this._setInnerHtmlOfElement(this.previousOperand, this.currentOperand.textContent);
     } else {
-      this._setInnerHtmlOfElement(this.previousOperand, this._calculate());
+      let subtotal = this._calculate();
+      if (this.isError) {
+        this._allClear(false);
+        this._setInnerHtmlOfElement(this.currentOperand, subtotal);
+
+        return
+      } else {
+        this._setInnerHtmlOfElement(this.previousOperand, subtotal);
+      }
     }
 
-    this.isOperationAfterEqual = false;
-    this.currentOperation = operator;
-    this._setInnerHtmlOfElement(this.operationField, operator);
+    this.needToClearCurrentOperand = false;
+
+    this.currentOperator = operator;
+    if (operator === 'x') {
+      this._setInnerHtmlOfElement(this.operationField, '^');
+    } else {
+      this._setInnerHtmlOfElement(this.operationField, operator);
+    }
+
     this._clearCurrentOperand();
   }
 
-  _calculate() {
+  _calculate(isRoot = false) {
     let result = 0;
-    switch (this.currentOperation) {
-      case '+':
-        result = +this.previousOperand.textContent + +this.currentOperand.textContent;
-        break;
-      case '-':
-        result = +this.previousOperand.textContent - +this.currentOperand.textContent;
-        break;
-      case '/':
-      case '÷':
-        result = +this.previousOperand.textContent / +this.currentOperand.textContent;
-        break;
-      case '*':
-      case '×':
-        result = +this.previousOperand.textContent * +this.currentOperand.textContent;
-        break;
+
+    if (isRoot) {
+      if (+this.currentOperand.textContent < 0) {
+        result = 'Cannot square root a negative number!';
+        this.isError = true;
+      } else {
+        result = Math.sqrt(+this.currentOperand.textContent);
+      }
+    } else {
+      switch (this.currentOperator) {
+        case '+':
+          result = +this.previousOperand.textContent + +this.currentOperand.textContent;
+          break;
+        case '-':
+          result = +this.previousOperand.textContent - +this.currentOperand.textContent;
+          break;
+        case '/':
+        case '÷':
+          if (this.currentOperand.textContent.match(/^-?0$/)) {
+            result = 'Cannot divide by zero!';
+            this.isError = true;
+          } else {
+            result = +this.previousOperand.textContent / +this.currentOperand.textContent;
+          }
+          break;
+        case '*':
+        case '×':
+          result = +this.previousOperand.textContent * +this.currentOperand.textContent;
+          break;
+        case 'x':
+          result = (+this.previousOperand.textContent) ** +this.currentOperand.textContent
+          break;
+      }
     }
-    return +result.toFixed(this.rounding)
+
+    if (result.toString() === 'NaN' || result.toString().match(/.Infinity/)) {
+      result = 'Error';
+      this.isError = true;
+    } else if (+result) {
+      result = +result.toFixed(this.rounding)
+    }
+
+    return result;
   }
 
   // Helper methods
@@ -202,7 +260,7 @@ export class Calculator {
     return element;
   }
 
-  _addElementsToParent(parent, insertAtTheEnd = true,  ...elements) {
+  _addElementsToParent(parent, insertAtTheEnd = true, ...elements) {
     if (insertAtTheEnd) {
       elements.forEach(element => parent.append(element));
     } else {

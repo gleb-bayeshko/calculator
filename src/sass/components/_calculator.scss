@@ -1,5 +1,6 @@
 .calculator-grid {
   position: relative;
   background-color: $calculator-background-color;
+  box-shadow: 0 0 10px $color-dark;
   padding: 5px;
 }

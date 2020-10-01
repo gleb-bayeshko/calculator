@@ -1,18 +1,23 @@
 export const calculatorData = [
   {
     'AC': {
-      classes: ['button', 'span-2'],
+      classes: ['button', 'button_operation', 'span-1'],
       dataType: ['all-clear'],
     }
   },
-  {'DEL': {
-      classes: ['button', 'span-1'],
+  {'⌫': {
+      classes: ['button', 'button_operation', 'span-1'],
       dataType: ['delete'],
     }
   },
-  {'÷': {
-      classes: ['button', 'span-1'],
-      dataType: ['operation'],
+  {'√': {
+    classes: ['button', 'button_operation', 'span-1'],
+    dataType: ['operation'],
+    }
+  },
+  {'x': {
+    classes: ['button', 'button_operation', 'button_exponentiation', 'span-1'],
+    dataType: ['operation'],
     }
   },
   {'1': {
@@ -30,9 +35,9 @@ export const calculatorData = [
       dataType: ['number'],
     }
   },
-  {'×': {
-      classes: ['button', 'span-1'],
-      dataType: ['operation'],
+  {'÷': {
+    classes: ['button', 'button_operation', 'span-1'],
+    dataType: ['operation'],
     }
   },
   {'4': {
@@ -50,9 +55,9 @@ export const calculatorData = [
       dataType: ['number'],
     }
   },
-  {'+': {
-      classes: ['button', 'span-1'],
-      dataType: ['operation'],
+  {'×': {
+    classes: ['button', 'button_operation', 'span-1'],
+    dataType: ['operation'],
     }
   },
   {'7': {
@@ -70,9 +75,9 @@ export const calculatorData = [
       dataType: ['number'],
     }
   },
-  {'-': {
-      classes: ['button', 'span-1'],
-      dataType: ['operation'],
+  {'+': {
+    classes: ['button', 'button_operation', 'span-1'],
+    dataType: ['operation'],
     }
   },
   {'.': {
@@ -86,8 +91,13 @@ export const calculatorData = [
     }
   },
   {'=': {
-    classes: ['button', 'span-2'],
+    classes: ['button', 'button_equal', 'span-1'],
     dataType: ['operation'],
     }
-  }
+  },
+  {'-': {
+    classes: ['button', 'button_operation', 'span-1'],
+    dataType: ['operation'],
+    }
+  },
 ]

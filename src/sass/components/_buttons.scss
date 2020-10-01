@@ -61,3 +61,31 @@
   }
 
 }
+
+.button_operation {
+  background-color: $button-operation-background-color;
+}
+
+.button_exponentiation {
+  position: relative;
+
+  &:after {
+    content: 'n';
+    display: block;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  &:active:after {
+    font-size: 0.8rem;
+    right: 17px;
+  }
+}
+
+.button_equal {
+  background-color: $button-equal-background-color;
+}
