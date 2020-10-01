@@ -1,5 +1,7 @@
 # Calculator #
-![Calculator](public/preview.png) [![Demo-button](public/demo-button.png)](https://gleb-bayeshko.github.io/calculator/)
+![Calculator](public/preview.png)
+
+[![Demo-button](public/demo-button.png)](https://gleb-bayeshko.github.io/calculator/)
 
 ## Technology stack ##
 * **HTML**
