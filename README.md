@@ -25,10 +25,10 @@
 
 ## Functionality ##
 - Basic calculations:
-  - Addition
-  - Subtraction
-  - Multiplication
-  - Division
+  - Addition,
+  - Subtraction,
+  - Multiplication,
+  - Division,
 - Actions with fractional numbers;
 - Input of negative numbers;
 - All-clear button;
