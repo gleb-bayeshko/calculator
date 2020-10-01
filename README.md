@@ -1,7 +1,7 @@
 # Calculator #
 ![Calculator](preview.png)
 
-[DEMO](https://gleb-bayeshko.github.io/calculator/)]
+[DEMO](https://gleb-bayeshko.github.io/calculator/) ------>
 
 ## Technology stack ##
 * **HTML**
@@ -25,13 +25,13 @@
 
 ## Functionality ##
 1. Basic calculations:
-  1. Addition
-  1. Subtraction
-  1. Multiplication
-  1. Division
+  - Addition
+  - Subtraction
+  - Multiplication
+  - Division
 1. Actions with fractional numbers;
 1. Input of negative numbers;
 1. All-clear button;
 1. Delete button:
-  1. Delete numbers one at time,
-  1. Delete operator if input is empty and move pervious result to the input area;
+  - Delete numbers one at time,
+  - Delete operator if input is empty and move pervious result to the input area;
