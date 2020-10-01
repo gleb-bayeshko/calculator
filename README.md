@@ -1,9 +1,9 @@
-#Calculator#
+# Calculator #
 ![Calculator](preview.png)
 
 [DEMO](https://gleb-bayeshko.github.io/calculator/)]
 
-##Technology stack##
+## Technology stack ##
 * **HTML**
 * **CSS/SASS** *(SCSS)*:
   * Folders and files architecture,
@@ -23,7 +23,7 @@
   * Modes (dev/prod),
   * Final bundle.
 
-##Functionality##
+## Functionality ##
 1. Basic calculations:
   1. Addition
   1. Subtraction
